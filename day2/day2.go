@@ -31,53 +31,35 @@ func gameRounds() []string {
 }
 
 func play(game string) (int, int) {
-	switch game {
-	case "AX":
-		return Rock, Rock
-	case "BY":
-		return Paper, Paper
-	case "CZ":
-		return Scissor, Scissor
-	case "AY":
-		return Rock, Paper
-	case "BX":
-		return Paper, Rock
-	case "AZ":
-		return Rock, Scissor
-	case "CX":
-		return Scissor, Rock
-	case "BZ":
-		return Paper, Scissor
-	case "CY":
-		return Scissor, Paper
+	m := map[string][]int{
+		"AX": {Rock, Rock},
+		"BY": {Paper, Paper},
+		"CZ": {Scissor, Scissor},
+		"AY": {Rock, Paper},
+		"BX": {Paper, Rock},
+		"AZ": {Rock, Scissor},
+		"CX": {Scissor, Rock},
+		"BZ": {Paper, Scissor},
+		"CY": {Scissor, Paper},
 	}
 
-	return 0, 0
+	return calcWinner(m[game][0], m[game][1])
 }
 
 func playFixed(game string) (int, int) {
-	switch game {
-	case "AX":
-		return Rock, Scissor
-	case "BY":
-		return Paper, Paper
-	case "CZ":
-		return Scissor, Rock
-	case "AY":
-		return Rock, Rock
-	case "BX":
-		return Paper, Rock
-	case "AZ":
-		return Rock, Paper
-	case "CX":
-		return Scissor, Paper
-	case "BZ":
-		return Paper, Scissor
-	case "CY":
-		return Scissor, Scissor
+	m := map[string][]int{
+		"AX": {Rock, Scissor},
+		"BY": {Paper, Paper},
+		"CZ": {Scissor, Rock},
+		"AY": {Rock, Rock},
+		"BX": {Paper, Rock},
+		"AZ": {Rock, Paper},
+		"CX": {Scissor, Paper},
+		"BZ": {Paper, Scissor},
+		"CY": {Scissor, Scissor},
 	}
 
-	return 0, 0
+	return calcWinner(m[game][0], m[game][1])
 }
 
 func calcWinner(s1 int, s2 int) (int, int) {
@@ -99,7 +81,7 @@ func Part1() (int, int) {
 
 	games := gameRounds()
 	for _, game := range games {
-		p1, p2 := calcWinner(play(game))
+		p1, p2 := play(game)
 		opponentScore += p1
 		myScore += p2
 	}
@@ -113,7 +95,7 @@ func Part2() (int, int) {
 
 	games := gameRounds()
 	for _, game := range games {
-		p1, p2 := calcWinner(playFixed(game))
+		p1, p2 := playFixed(game)
 		opponentScore += p1
 		myScore += p2
 	}
