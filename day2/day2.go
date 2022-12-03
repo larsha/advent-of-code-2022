@@ -32,47 +32,34 @@ func gameRounds() []string {
 
 func play(game string) (int, int) {
 	m := map[string][]int{
-		"AX": {Rock, Rock},
-		"BY": {Paper, Paper},
-		"CZ": {Scissor, Scissor},
-		"AY": {Rock, Paper},
-		"BX": {Paper, Rock},
-		"AZ": {Rock, Scissor},
-		"CX": {Scissor, Rock},
-		"BZ": {Paper, Scissor},
-		"CY": {Scissor, Paper},
+		"AX": {Rock + DrawScore, Rock + DrawScore},
+		"BY": {Paper + DrawScore, Paper + DrawScore},
+		"CZ": {Scissor + DrawScore, Scissor + DrawScore},
+		"AY": {Rock, Paper + WinScore},
+		"BX": {Paper + WinScore, Rock},
+		"AZ": {Rock + WinScore, Scissor},
+		"CX": {Scissor, Rock + WinScore},
+		"BZ": {Paper, Scissor + WinScore},
+		"CY": {Scissor + WinScore, Paper},
 	}
 
-	return calcWinner(m[game][0], m[game][1])
+	return m[game][0], m[game][1]
 }
 
 func playFixed(game string) (int, int) {
 	m := map[string][]int{
-		"AX": {Rock, Scissor},
-		"BY": {Paper, Paper},
-		"CZ": {Scissor, Rock},
-		"AY": {Rock, Rock},
-		"BX": {Paper, Rock},
-		"AZ": {Rock, Paper},
-		"CX": {Scissor, Paper},
-		"BZ": {Paper, Scissor},
-		"CY": {Scissor, Scissor},
+		"AX": {Rock + WinScore, Scissor},
+		"BY": {Paper + DrawScore, Paper + DrawScore},
+		"CZ": {Scissor, Rock + WinScore},
+		"AY": {Rock + DrawScore, Rock + DrawScore},
+		"BX": {Paper + WinScore, Rock},
+		"AZ": {Rock, Paper + WinScore},
+		"CX": {Scissor + WinScore, Paper},
+		"BZ": {Paper, Scissor + WinScore},
+		"CY": {Scissor + DrawScore, Scissor + DrawScore},
 	}
 
-	return calcWinner(m[game][0], m[game][1])
-}
-
-func calcWinner(s1 int, s2 int) (int, int) {
-	if s1 == Rock && s2 == Scissor || s1 == Paper && s2 == Rock || s1 == Scissor && s2 == Paper {
-		s1 += WinScore
-	} else if s1 == s2 {
-		s1 += DrawScore
-		s2 += DrawScore
-	} else {
-		s2 += WinScore
-	}
-
-	return s1, s2
+	return m[game][0], m[game][1]
 }
 
 func Part1() (int, int) {
