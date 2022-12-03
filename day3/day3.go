@@ -3,6 +3,7 @@ package day3
 import (
 	"os"
 	"strings"
+	"unicode"
 )
 
 func getRucksacks() []string {
@@ -13,9 +14,11 @@ func getRucksacks() []string {
 }
 
 func getRunePriority(c rune) int {
-	chars := "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+	if unicode.IsLower(c) {
+		return int(c) - 96
+	}
 
-	return strings.Index(chars, string(c)) + 1
+	return int(c) - 38
 }
 
 type Set map[int]struct{}
