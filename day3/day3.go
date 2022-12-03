@@ -43,19 +43,15 @@ func Part1() int {
 			charCount++
 		}
 
-		firstPart := r[0 : charCount/2]
-		lastPart := r[charCount/2 : charCount]
+		firstPart := priority(r[0 : charCount/2])
+		lastPart := priority(r[charCount/2 : charCount])
 
-		prio1 := priority(firstPart)
-		prio2 := priority(lastPart)
-
-		for p1 := range prio1 {
-			for p2 := range prio2 {
+		for p1 := range firstPart {
+			for p2 := range lastPart {
 				if p1 == p2 {
 					sum += p1
 				}
 			}
-
 		}
 	}
 
@@ -93,7 +89,6 @@ func Part2() int {
 				sum += c
 			}
 		}
-
 	}
 
 	return sum
