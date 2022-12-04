@@ -22,7 +22,7 @@ func transform(s string) (int, int, int, int) {
 	return f[0], f[1], f[2], f[3]
 }
 
-func transformer() (int, int) {
+func counter() (int, int) {
 	file, _ := os.Open("input.txt")
 	defer file.Close()
 
@@ -46,13 +46,13 @@ func transformer() (int, int) {
 }
 
 func Part1() int {
-	c, _ := transformer()
+	c, _ := counter()
 
 	return c
 }
 
 func Part2() int {
-	_, o := transformer()
+	_, o := counter()
 
 	return o
 }
