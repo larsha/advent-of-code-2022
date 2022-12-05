@@ -8,10 +8,6 @@ import (
 	"strings"
 )
 
-const (
-	InputFile = "input.txt"
-)
-
 func moves(t string) (int, int, int) {
 	var nums []int
 	splitted := strings.Split(t, " ")
@@ -47,15 +43,20 @@ func message(m map[int][]string) string {
 
 type Stacks map[int][]string
 
-func stacks() Stacks {
-	file, _ := os.Open(InputFile)
+func parser() (Stacks, []string) {
+	file, _ := os.Open("input.txt")
 	defer file.Close()
 
 	stacks := make(Stacks)
+	var instructions []string
 
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		t := scanner.Text()
+
+		if strings.HasPrefix(t, "move") {
+			instructions = append(instructions, t)
+		}
 
 		for i, r := range t {
 			if r == 91 && i%4 == 0 {
@@ -65,26 +66,18 @@ func stacks() Stacks {
 		}
 	}
 
-	return stacks
+	return stacks, instructions
 }
 
 func Part1() string {
-	stacks := stacks()
+	stacks, instructions := parser()
 
-	file, _ := os.Open(InputFile)
-	defer file.Close()
+	for _, instr := range instructions {
+		units, from, to := moves(instr)
 
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		t := scanner.Text()
-
-		if strings.HasPrefix(t, "move") {
-			units, from, to := moves(t)
-
-			for i := 1; i <= units; i++ {
-				stacks[to] = append([]string{stacks[from][0]}, stacks[to]...)
-				stacks[from] = append(stacks[from][:0], stacks[from][1:]...)
-			}
+		for i := 1; i <= units; i++ {
+			stacks[to] = append([]string{stacks[from][0]}, stacks[to]...)
+			stacks[from] = append(stacks[from][:0], stacks[from][1:]...)
 		}
 	}
 
@@ -92,24 +85,16 @@ func Part1() string {
 }
 
 func Part2() string {
-	stacks := stacks()
+	stacks, instructions := parser()
 
-	file, _ := os.Open(InputFile)
-	defer file.Close()
+	for _, instr := range instructions {
+		units, from, to := moves(instr)
 
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		t := scanner.Text()
+		fromCopy := make([]string, len(stacks[from]))
+		copy(fromCopy, stacks[from])
 
-		if strings.HasPrefix(t, "move") {
-			units, from, to := moves(t)
-
-			fromCopy := make([]string, len(stacks[from]))
-			copy(fromCopy, stacks[from])
-
-			stacks[to] = append(fromCopy[:units], stacks[to]...)
-			stacks[from] = append(stacks[from][:0], stacks[from][units:]...)
-		}
+		stacks[to] = append(fromCopy[:units], stacks[to]...)
+		stacks[from] = append(stacks[from][:0], stacks[from][units:]...)
 	}
 
 	return message(stacks)
